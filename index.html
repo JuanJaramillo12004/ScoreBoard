@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Styles/style.css">
+    <script type="module" src="Scripts/utils.js"></script>
+    <title>ScoreBoard</title>
+</head>
+<body>
+    <div class="container">
+        <main>
+            <section>
+                <fieldset>
+                    <legend>Aplicativo para ScoreBoard</legend>
+                    <input type="text" value="Team1 2 1 C;" id="inputString"><br>
+                    <button id="ingresar">Ingresar Datos</button><button id="reporte">Desplegar reporte</button>
+                    <select id="criterio">
+                        <option value="problemsSolved" selected>No. problemas resueltos</option>
+                        <option value="penaltyTime">Tiempo de penalización</option>
+                        <option value="contest">Respuesta</option>
+                    </select><br><br>
+                    <textarea id="respuesta" cols="70" rows="7" readonly>....</textarea>   
+                </fieldset>      
+            </section>    
+        </main>
+    </div>
+</body>
+</html>
