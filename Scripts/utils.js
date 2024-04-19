@@ -1,3 +1,6 @@
+/* Team1 1 5 C;Team2 5 10 C;Team3 2 15 I;Team1 3 20 R;Team2 1 25 R;Team2 4 30 C;Team1 3 35 I;Team1 3 40 C;Team3 2 45 I;Team3 2 50 C */
+
+
 // Almacenar elementos del DOM en variables
 let input = document.getElementById("inputString");
 let tArea = document.getElementById("respuesta");
