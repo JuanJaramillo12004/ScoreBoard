@@ -13,13 +13,14 @@
         <main>
             <section>
                 <fieldset>
-                    <legend>Aplicativo para ScoreBoard</legend>
-                    <input type="text";" id="inputString"><br>
-                    <button id="ingresar">Ingresar Datos</button><button id="reporte">Desplegar reporte</button>
+                    <legend>ScoreBoard Application</legend>
+                    <input type="text";" id="inputString" value="Team1 1 5 C;Team2 5 10 C;Team3 2 15 I;Team1 3 20 R;Team2 1 25 R;Team2 4 30 C;Team1 3 35 I;Team1 3 40 C;Team3 2 45 I;Team3 2 50 C"><br>
+                    <button id="procesar">Process</button>
                     <select id="criterio">
-                        <option value="problemsSolved" selected>No. problemas resueltos</option>
-                        <option value="penaltyTime">Tiempo de penalización</option>
-                        <option value="contest">Respuesta</option>
+                        <option value="enter" selected>Enter data</option>
+                        <option value="problemsSolved">Number of problems solved</option>
+                        <option value="penaltyTime">Penalty time</option>
+                        <option value="contest">OrderTeam</option>
                     </select><br><br>
                     <textarea id="respuesta" cols="70" rows="7" readonly>....</textarea>   
                 </fieldset>      
