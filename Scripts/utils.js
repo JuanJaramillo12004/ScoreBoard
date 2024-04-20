@@ -9,7 +9,7 @@ let opcion = document.getElementById("criterio");
 document.getElementById("procesar").addEventListener("click", function(){calcularScoreBoard(input.value);});
 tArea.value = "";
 function calcularScoreBoard(caso){
-    if (opcion.value == "ingresar"){
+    if (opcion.value == "enter"){
         caso.split(";").forEach((elemento) => {
             let resultado = elemento.split(" "); //elemento.trim().split(" "); 
             tArea.value += `${resultado[0]} ${resultado[1]} ${resultado[2]} ${resultado[3]}\n`;
