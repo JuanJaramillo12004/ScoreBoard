@@ -5,26 +5,44 @@ let option = document.getElementById("options");
 document.getElementById("process").addEventListener("click", function(){calcularScoreBoard(input.value);});
 
 function calcularScoreBoard(caso){
-    tArea.value = "";
+    // Creamos un objeto vacío para almacenar los equipos y sus puntajes
+    let equipos = {};
+
+    // Dividimos el caso en elementos separados por ";"
     caso.split(";").forEach((element) => {
-        let res = element.split(" ");
-        tArea.value += `${res[0]} ${res[1]} ${res[2]} ${res[3]} \n`;
+        // Dividimos cada elemento en equipo, problema, tiempo y estado
+        let [team, problem, time, status] = element.split(" ");
+
+        // Si el equipo no existe en el objeto equipos, lo agregamos con valores iniciales
+        if (!(team in equipos)) {
+            equipos[team] = {team, problem: 0, time: 0};
+        }
+
+        // Si el estado es 'I' (incorrecto), sumamos 20 al tiempo del equipo
+        if (status === 'I') {
+            equipos[team].time += 20;
+        }
+
+        // Si el estado es 'C' (correcto), incrementamos el contador de problemas del equipo
+        // y sumamos el tiempo al tiempo total del equipo
+        if (status === 'C') {
+            equipos[team].problem += 1;
+            equipos[team].time += parseInt(time);
+        }
     });
 
-    tArea.value = tArea.value.split('\n').sort((a, b) => {
-        if (option.value == "orderTeams"){
-            const teamA = a.split(' ')[0];
-            const teamB = b.split(' ')[0];
-            return teamA.localeCompare(teamB);
-        } else if(option.value == "problemsSolved"){
-            const scoreA = a.split(' ')[1];
-            const scoreB = b.split(' ')[1];
-            return scoreB - scoreA;
-        } else { 
-            const scoreA = a.split(' ')[2];
-            const scoreB = b.split(' ')[2]; 
-            return scoreA - scoreB;
+    // Convertimos el objeto equipos en un array y lo ordenamos según las reglas de puntuación
+    let equiposArray = Object.values(equipos);
+    equiposArray.sort((a, b) => {
+        if (b.problem !== a.problem) {
+            return b.problem - a.problem;
+        } else if (a.time !== b.time) {
+            return a.time - b.time;
+        } else {
+            return a.team.localeCompare(b.team);
         }
-    }).join('\n').trim();
-}
+    });
 
+    // Imprimimos los resultados en el formato especificado
+    tArea.value = equiposArray.map(equipo => `${equipo.team} ${equipo.problem} ${equipo.time} C`).join('\n');
+}
