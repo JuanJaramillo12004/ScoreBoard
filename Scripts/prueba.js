@@ -5,28 +5,29 @@ let option = document.getElementById("options");
 document.getElementById("process").addEventListener("click", function(){calcularScoreBoard(input.value);});
 
 function calcularScoreBoard(caso){
-    let equipos = [];
+    let equipos = {};
 
     caso.split(";").forEach((element) => {
         let [team, problem, time, status] = element.split(" ");
-        let equipo = equipos.find(e => e.team === team);
 
-        if (!equipo) {
-            equipo = {team, problem: 0, time: 0};
-            equipos.push(equipo);
+        if (!(team in equipos)) {
+            equipos[team] = {team, problem: 0, time: 0, status: ""};
         }
 
         if (status === 'I') {
-            equipo.time += 20;
+            equipos[team].time += 20;
         }
 
         if (status === 'C') {
-            equipo.problem += 1;
-            equipo.time += parseInt(time);
+            equipos[team].problem += 1;
+            equipos[team].time += parseInt(time);
         }
+
+        equipos[team].status = status;
     });
 
-    equipos.sort((a, b) => {
+    let equiposArray = Object.values(equipos);
+    equiposArray.sort((a, b) => {
         if (b.problem !== a.problem) {
             return b.problem - a.problem;
         } else if (a.time !== b.time) {
@@ -36,5 +37,5 @@ function calcularScoreBoard(caso){
         }
     });
 
-    tArea.value = equipos.map(equipo => `${equipo.team} ${equipo.problem} ${equipo.time}`).join('\n');
+    tArea.value = equiposArray.map(equipo => `${equipo.team} ${equipo.problem} ${equipo.time}`).join('\n');
 }

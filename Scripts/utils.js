@@ -11,7 +11,11 @@ function calcularScoreBoard(caso){
         let [team, problem, time, status] = element.split(" ");
 
         if (!(team in equipos)) {
-            equipos[team] = {team, problem: 0, time: 0};
+            equipos[team] = {team, problems: {}, time: 0};
+        }
+
+        if (!(problem in equipos[team].problems)) {
+            equipos[team].problems[problem] = status;
         }
 
         if (status === 'I') {
@@ -19,15 +23,21 @@ function calcularScoreBoard(caso){
         }
 
         if (status === 'C') {
-            equipos[team].problem += 1;
+            equipos[team].problems[problem] = status;
             equipos[team].time += parseInt(time);
         }
     });
 
     let equiposArray = Object.values(equipos);
+    equiposArray.forEach(equipo => {
+        equipo.problemsSolved = Object.values(equipo.problems).filter(status => status === 'C').length;
+        if (Object.values(equipo.problems).includes('I')) {
+            equipo.time -= 20;
+        }
+    });
     equiposArray.sort((a, b) => {
-        if (b.problem !== a.problem) {
-            return b.problem - a.problem;
+        if (b.problemsSolved !== a.problemsSolved) {
+            return b.problemsSolved - a.problemsSolved;
         } else if (a.time !== b.time) {
             return a.time - b.time;
         } else {
@@ -35,5 +45,5 @@ function calcularScoreBoard(caso){
         }
     });
 
-    tArea.value = equiposArray.map(equipo => `${equipo.team} ${equipo.problem} ${equipo.time}`).join('\n');
+    tArea.value = equiposArray.map(equipo => `${equipo.team} ${equipo.problemsSolved} ${equipo.time}`).join('\n');
 }
