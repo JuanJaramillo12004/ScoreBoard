@@ -2,7 +2,9 @@ let input = document.getElementById("inputString");
 let tArea = document.getElementById("answer");
 let option = document.getElementById("options");
 
-document.getElementById("process").addEventListener("click", function(){calcularScoreBoard(input.value);});
+document.getElementById("process").addEventListener("click", () => {
+    tArea.value = calcularScoreBoard(input.value);
+});
 
 function calcularScoreBoard(caso){
     let equipos = {};
@@ -11,31 +13,41 @@ function calcularScoreBoard(caso){
         let [team, problem, time, status] = element.split(" ");
 
         if (!(team in equipos)) {
-            equipos[team] = {team, problem: 0, time: 0, status: ""};
+            equipos[team] = {team, problems: {}, time: 0};
         }
+
+        if (!(problem in equipos[team].problems)) {
+            equipos[team].problems[problem] = [];
+        }
+
+        equipos[team].problems[problem].push(status);
 
         if (status === 'I') {
             equipos[team].time += 20;
         }
 
         if (status === 'C') {
-            equipos[team].problem += 1;
             equipos[team].time += parseInt(time);
         }
-
-        equipos[team].status = status;
     });
 
     let equiposArray = Object.values(equipos);
+    equiposArray.forEach(equipo => {
+        equipo.problemsSolved = Object.values(equipo.problems).reduce((count, problemAttempts) => {
+            return count + (problemAttempts.includes('C') ? 1 : 0);
+        }, 0);
+        Object.values(equipo.problems).forEach(problemAttempts => {
+            if (!problemAttempts.includes('C')) {
+                equipo.time -= problemAttempts.filter(attempt => attempt === 'I').length * 20;
+            }
+        });
+    });
     equiposArray.sort((a, b) => {
-        if (b.problem !== a.problem) {
-            return b.problem - a.problem;
-        } else if (a.time !== b.time) {
-            return a.time - b.time;
-        } else {
-            return a.team.localeCompare(b.team);
+        if (b.problemsSolved !== a.problemsSolved) {
+            return b.problemsSolved - a.problemsSolved;
         }
+        return a.time - b.time;
     });
 
-    tArea.value = equiposArray.map(equipo => `${equipo.team} ${equipo.problem} ${equipo.time}`).join('\n');
+    return equiposArray.map(equipo => `${equipo.team} ${equipo.problemsSolved} ${equipo.time}`).join('\n');
 }
