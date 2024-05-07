@@ -42,11 +42,15 @@ function calcularScoreBoard(caso){
             }
         });
     });
+    
     equiposArray.sort((a, b) => {
         if (b.problemsSolved !== a.problemsSolved) {
             return b.problemsSolved - a.problemsSolved;
+        } else if (a.time !== b.time) {
+            return a.time - b.time;
+        } else {
+            return a.team.localeCompare(b.team);
         }
-        return a.time - b.time;
     });
 
     return equiposArray.map(equipo => `${equipo.team} ${equipo.problemsSolved} ${equipo.time}`).join('\n');

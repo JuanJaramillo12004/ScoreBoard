@@ -35,6 +35,7 @@ function calcularScoreBoard(caso){
             equipo.time -= 20;
         }
     });
+    
     equiposArray.sort((a, b) => {
         if (b.problemsSolved !== a.problemsSolved) {
             return b.problemsSolved - a.problemsSolved;

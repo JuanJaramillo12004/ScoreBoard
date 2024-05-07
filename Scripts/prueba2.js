@@ -57,12 +57,14 @@ function calcularScoreBoard(caso) {
         }
     }
 
-    // Ordenar los equipos por el número de problemas resueltos y el tiempo
     equiposArray.sort((a, b) => {
         if (b.problemsSolved !== a.problemsSolved) {
             return b.problemsSolved - a.problemsSolved;
+        } else if (a.time !== b.time) {
+            return a.time - b.time;
+        } else {
+            return a.team.localeCompare(b.team);
         }
-        return a.time - b.time;
     });
 
     // Convertir el array de equipos en una cadena de texto para la salida
