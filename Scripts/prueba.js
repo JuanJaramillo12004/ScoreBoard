@@ -36,6 +36,7 @@ function calcularScoreBoard(caso){
         equipo.problemsSolved = Object.values(equipo.problems).reduce((count, problemAttempts) => {
             return count + (problemAttempts.includes('C') ? 1 : 0);
         }, 0);
+        
         Object.values(equipo.problems).forEach(problemAttempts => {
             if (!problemAttempts.includes('C')) {
                 equipo.time -= problemAttempts.filter(attempt => attempt === 'I').length * 20;
