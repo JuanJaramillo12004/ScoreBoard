@@ -2,7 +2,9 @@ let input = document.getElementById("inputString");
 let tArea = document.getElementById("answer");
 let option = document.getElementById("options");
 
-document.getElementById("process").addEventListener("click", function(){calcularScoreBoard(input.value);});
+document.getElementById("process").addEventListener("click", () => {
+    tArea.value = calcularScoreBoard(input.value);
+});
 
 function calcularScoreBoard(caso){
     let equipos = {};
@@ -15,25 +17,31 @@ function calcularScoreBoard(caso){
         }
 
         if (!(problem in equipos[team].problems)) {
-            equipos[team].problems[problem] = status;
+            equipos[team].problems[problem] = [];
         }
+
+        equipos[team].problems[problem].push(status);
 
         if (status === 'I') {
             equipos[team].time += 20;
         }
 
         if (status === 'C') {
-            equipos[team].problems[problem] = status;
             equipos[team].time += parseInt(time);
         }
     });
 
     let equiposArray = Object.values(equipos);
     equiposArray.forEach(equipo => {
-        equipo.problemsSolved = Object.values(equipo.problems).filter(status => status === 'C').length;
-        if (Object.values(equipo.problems).includes('I')) {
-            equipo.time -= 20;
-        }
+        equipo.problemsSolved = Object.values(equipo.problems).reduce((count, problemAttempts) => {
+            return count + (problemAttempts.includes('C') ? 1 : 0);
+        }, 0);
+        
+        Object.values(equipo.problems).forEach(problemAttempts => {
+            if (!problemAttempts.includes('C')) {
+                equipo.time -= problemAttempts.filter(attempt => attempt === 'I').length * 20;
+            }
+        });
     });
     
     equiposArray.sort((a, b) => {
@@ -46,5 +54,5 @@ function calcularScoreBoard(caso){
         }
     });
 
-    tArea.value = equiposArray.map(equipo => `${equipo.team} ${equipo.problemsSolved} ${equipo.time}`).join('\n');
+    return equiposArray.map(equipo => `${equipo.team} ${equipo.problemsSolved} ${equipo.time}`).join('\n');
 }
