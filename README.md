@@ -5,4 +5,4 @@
 - Alejandro Bravo Isajar - 2220332
 
 # Complejidad calcularScoreBoard:
-
+Esto esta en el archivo adjunto pdf.
