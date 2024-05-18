@@ -1,58 +1,57 @@
-let input = document.getElementById("inputString");
+let submissions = document.getElementById("inputString");
 let tArea = document.getElementById("answer");
-let option = document.getElementById("options");
 
 document.getElementById("process").addEventListener("click", () => {
-    tArea.value = calcularScoreBoard(input.value);
+    tArea.value = calcularScoreBoard(submissions.value);
 });
 
-function calcularScoreBoard(caso){
-    let equipos = {};
+function calcularScoreBoard(m){
+    let obj = {};
 
-    caso.split(";").forEach((element) => {
-        let [team, problem, time, status] = element.split(" ");
+    m.split(";").forEach((element) => {
+        let [n, p, time, L] = element.split(" ");
 
-        if (!(team in equipos)) {
-            equipos[team] = {team, problems: {}, time: 0};
+        if (!(n in obj)) {
+            obj[n] = {n, problems: {}, time: 0};
         }
 
-        if (!(problem in equipos[team].problems)) {
-            equipos[team].problems[problem] = [];
+        if (!(p in obj[n].problems)) {
+            obj[n].problems[p] = [];
         }
 
-        equipos[team].problems[problem].push(status);
+        obj[n].problems[p].push(L);
 
-        if (status === 'I') {
-            equipos[team].time += 20;
+        if (L === 'I') {
+            obj[n].time += 20;
         }
 
-        if (status === 'C') {
-            equipos[team].time += parseInt(time);
+        if (L === 'C') {
+            obj[n].time += parseInt(time);
         }
     });
 
-    let equiposArray = Object.values(equipos);
-    equiposArray.forEach(equipo => {
-        equipo.problemsSolved = Object.values(equipo.problems).reduce((count, problemAttempts) => {
+    let bd = Object.values(obj);
+    bd.forEach(team => {
+        team.problemsSolved = Object.values(team.problems).reduce((count, problemAttempts) => {
             return count + (problemAttempts.includes('C') ? 1 : 0);
         }, 0);
         
-        Object.values(equipo.problems).forEach(problemAttempts => {
+        Object.values(team.problems).forEach(problemAttempts => {
             if (!problemAttempts.includes('C')) {
-                equipo.time -= problemAttempts.filter(attempt => attempt === 'I').length * 20;
+                team.time -= problemAttempts.filter(attempt => attempt === 'I').length * 20;
             }
         });
     });
     
-    equiposArray.sort((a, b) => {
+    bd.sort((a, b) => {
         if (b.problemsSolved !== a.problemsSolved) {
             return b.problemsSolved - a.problemsSolved;
         } else if (a.time !== b.time) {
             return a.time - b.time;
         } else {
-            return a.team.localeCompare(b.team);
+            return a.n.localeCompare(b.n);
         }
     });
 
-    return equiposArray.map(equipo => `${equipo.team} ${equipo.problemsSolved} ${equipo.time}`).join('\n');
+    return bd.map(team => `${team.n} ${team.problemsSolved} ${team.time}`).join('\n');
 }
