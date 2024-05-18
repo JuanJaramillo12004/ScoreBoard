@@ -1,15 +1,15 @@
-let submissions = document.getElementById("inputString");
-let tArea = document.getElementById("answer");
+let input = document.getElementById("inputString");
+let output = document.getElementById("answer");
 
 document.getElementById("process").addEventListener("click", () => {
-    tArea.value = calcularScoreBoard(submissions.value);
+    output.value = calcularScoreBoard(input.value);
 });
 
-function calcularScoreBoard(m){
+function calcularScoreBoard(caso){
     let obj = {};
 
-    m.split(";").forEach((element) => {
-        let [n, p, time, L] = element.split(" ");
+    caso.split(";").forEach((m) => {
+        let [n, p, time, L] = m.split(" ");
 
         if (!(n in obj)) {
             obj[n] = {n, problems: {}, time: 0};
@@ -32,15 +32,19 @@ function calcularScoreBoard(m){
 
     let bd = Object.values(obj);
     bd.forEach(team => {
-        team.problemsSolved = Object.values(team.problems).reduce((count, problemAttempts) => {
-            return count + (problemAttempts.includes('C') ? 1 : 0);
-        }, 0);
-        
+        let problemsSolved = 0;
+        let incorrectAttempts = 0;
+    
         Object.values(team.problems).forEach(problemAttempts => {
-            if (!problemAttempts.includes('C')) {
-                team.time -= problemAttempts.filter(attempt => attempt === 'I').length * 20;
+            if (problemAttempts.includes('C')) {
+                problemsSolved++;
+            } else {
+                incorrectAttempts += problemAttempts.filter(attempt => attempt === 'I').length;
             }
         });
+    
+        team.problemsSolved = problemsSolved;
+        team.time -= incorrectAttempts * 20;
     });
     
     bd.sort((a, b) => {
